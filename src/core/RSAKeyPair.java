@@ -2,9 +2,9 @@ package core;
 
 import util.Pair;
 
-public class RSAKeyPair extends Pair<String, String> {
+public class RSAKeyPair extends Pair<Key, Key> {
 
-	public RSAKeyPair(String first, String second) {
+	public RSAKeyPair(Key first, Key second) {
 		super(first, second);
 	}	
 }
