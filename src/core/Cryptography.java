@@ -58,8 +58,7 @@ public class Cryptography {
 		BigInteger encryptedMessage = BigInteger.ZERO;
 		for (int i = 0; i < completeBlocks; i++) {
 			String subS = plainText.substring(i * 4, i * 4 + 4);
-			System.out.println(subS);
-			byte[] bytes = plainText.substring(i * 4, i * 4 + 4).getBytes();
+			byte[] bytes = subS.getBytes();
 			BigInteger m = new BigInteger(bytes);
 			BigInteger c = encryptBlock(m, publicKey);
 			encryptedMessage = encryptedMessage.shiftLeft(64).add(c);
@@ -77,7 +76,8 @@ public class Cryptography {
 		String decryptedMessage = "";
 		
 		//Mask of 0xFFFFFFFFFFFFFFFF = 8 bytes
-		BigInteger mask = BigInteger.valueOf(0xFFFFFFFF).shiftLeft(32).add(BigInteger.valueOf(0xFFFFFFFF));
+		BigInteger mask = new BigInteger("18446744073709551615");
+		System.out.println(mask);
 		
 		while(cipherText.compareTo(BigInteger.ZERO) != 0)
 		{
