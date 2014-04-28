@@ -15,25 +15,25 @@ public class Cryptography {
 	{
 		//Select two prime numbers p and q.
 		BigInteger p = BigInteger.probablePrime(32, new Random());
-		System.out.println("p: " + p);
+		//System.out.println("p: " + p);
 		BigInteger q = BigInteger.probablePrime(32, new Random());
-		System.out.println("q: " + q);
+		//System.out.println("q: " + q);
 		
 		//Calculate n;
 		BigInteger n = p.multiply(q);
-		System.out.println("n: " + n);
+		//System.out.println("n: " + n);
 		
 		//Calculate phi(n). phiN = (p - 1) * (q - 1)
 		BigInteger phiN = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));
-		System.out.println("phi(n): " + phiN);
+		//System.out.println("phi(n): " + phiN);
 		
 		//Select relatively prime e.
 		BigInteger e = relativePrimeTo(phiN);
-		System.out.println("e: " + e);
+		//System.out.println("e: " + e);
 		
 		//Determine d
 		BigInteger d = e.modInverse(phiN);
-		System.out.println("d: " + d);
+		//System.out.println("d: " + d);
 		
 		//Create our keys
 		Key pubkey = new Key(e, n);
@@ -57,6 +57,8 @@ public class Cryptography {
 		int bytesLeftOver = totalBytes % 4;
 		BigInteger encryptedMessage = BigInteger.ZERO;
 		for (int i = 0; i < completeBlocks; i++) {
+			String subS = plainText.substring(i * 4, i * 4 + 4);
+			System.out.println(subS);
 			byte[] bytes = plainText.substring(i * 4, i * 4 + 4).getBytes();
 			BigInteger m = new BigInteger(bytes);
 			BigInteger c = encryptBlock(m, publicKey);
@@ -72,7 +74,22 @@ public class Cryptography {
 	}
 	
 	public static String decrypt(BigInteger cipherText, Key privateKey) {
-		return null;
+		String decryptedMessage = "";
+		
+		//Mask of 0xFFFFFFFFFFFFFFFF = 8 bytes
+		BigInteger mask = BigInteger.valueOf(0xFFFFFFFF).shiftLeft(32).add(BigInteger.valueOf(0xFFFFFFFF));
+		
+		while(cipherText.compareTo(BigInteger.ZERO) != 0)
+		{
+			BigInteger cBlock = cipherText.and(mask);
+			BigInteger dBlock = decryptBlock(cBlock, privateKey);
+			byte[] bytes = dBlock.toByteArray();
+			String mBlock = new String(bytes);
+			decryptedMessage = mBlock + decryptedMessage;
+			cipherText = cipherText.shiftRight(64);
+		}
+		
+		return decryptedMessage;
 	}
 	
 	static BigInteger encryptBlock(BigInteger plainText, Key publicKey) {
