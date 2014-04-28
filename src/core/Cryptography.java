@@ -51,7 +51,31 @@ public class Cryptography {
 		return e;
 	}
 	
-	public static BigInteger encrypt(BigInteger plainText, Key publicKey) {
+	public static BigInteger encrypt(String plainText, Key publicKey) {
+		int totalBytes = plainText.length();
+		int completeBlocks = totalBytes / 4;
+		int bytesLeftOver = totalBytes % 4;
+		BigInteger encryptedMessage = BigInteger.ZERO;
+		for (int i = 0; i < completeBlocks; i++) {
+			byte[] bytes = plainText.substring(i * 4, i * 4 + 4).getBytes();
+			BigInteger m = new BigInteger(bytes);
+			BigInteger c = encryptBlock(m, publicKey);
+			encryptedMessage = encryptedMessage.shiftLeft(64).add(c);
+		}
+		if (bytesLeftOver > 0) {
+			byte[] bytes = plainText.substring(completeBlocks * 4).getBytes();
+			BigInteger m = new BigInteger(bytes);
+			BigInteger c = encryptBlock(m, publicKey);
+			encryptedMessage = encryptedMessage.shiftLeft(64).add(c);
+		}		
+		return encryptedMessage;
+	}
+	
+	public static String decrypt(BigInteger cipherText, Key privateKey) {
+		return null;
+	}
+	
+	static BigInteger encryptBlock(BigInteger plainText, Key publicKey) {
 		BigInteger e = publicKey.getFirst();
 		BigInteger n = publicKey.getSecond();
 		
@@ -59,7 +83,7 @@ public class Cryptography {
 		return plainText.modPow(e, n);
 	}
 	
-	public static BigInteger decrypt(BigInteger cipherText, Key privateKey) {
+	static BigInteger decryptBlock(BigInteger cipherText, Key privateKey) {
 		BigInteger d = privateKey.getFirst();
 		BigInteger n = privateKey.getSecond();
 		
