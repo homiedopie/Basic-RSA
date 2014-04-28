@@ -1,10 +1,12 @@
 package core;
 
+import java.math.BigInteger;
+
 import util.Pair;
 
-public class Key extends Pair<Integer, Integer> {
+public class Key extends Pair<BigInteger, BigInteger> {
 
-	public Key(Integer first, Integer second) {
+	public Key(BigInteger first, BigInteger second) {
 		super(first, second);
 	}
 	
