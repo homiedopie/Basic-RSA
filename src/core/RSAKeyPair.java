@@ -6,8 +6,8 @@ public class RSAKeyPair {
 
 	private Pair<Key, Key> keyPair;
 	
-	public RSAKeyPair(Key first, Key second) {
-		keyPair = new Pair<Key, Key>(first, second);
+	public RSAKeyPair(Key pubkey, Key privkey) {
+		keyPair = new Pair<Key, Key>(pubkey, privkey);
 	}
 	
 	public Key getPublicKey() {
