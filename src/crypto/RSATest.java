@@ -1,4 +1,4 @@
-package core;
+package crypto;
 
 import java.math.BigInteger;
 
@@ -10,10 +10,10 @@ import java.math.BigInteger;
 
 public class RSATest {
 
-	public static void main(String[] args) {
+	public static void test() {
 		RSAKeyPair keys = Cryptography.generateRSAKeys();
 		
-		String plainText = "Hello, world!";
+		String plainText = "Hello, world! Hello, world! Hello, world! ";
 		System.out.println("Message: " + plainText);
 		
 		BigInteger cipherText = Cryptography.encrypt(plainText, keys.getPublicKey());
