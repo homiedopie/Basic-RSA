@@ -15,33 +15,25 @@ public class Cryptography {
 	{
 		//Select two prime numbers p and q.
 		BigInteger p = BigInteger.probablePrime(32, new Random());
-		//System.out.println("p: " + p);
 		BigInteger q = BigInteger.probablePrime(32, new Random());
-		//System.out.println("q: " + q);
 		
 		//Calculate n;
 		BigInteger n = p.multiply(q);
-		//System.out.println("n: " + n);
 		
 		//Calculate phi(n). phiN = (p - 1) * (q - 1)
 		BigInteger phiN = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));
-		//System.out.println("phi(n): " + phiN);
 		
 		//Select relatively prime e.
 		BigInteger e = relativePrimeTo(phiN);
-		//System.out.println("e: " + e);
 		
 		//Determine d
 		BigInteger d = e.modInverse(phiN);
-		//System.out.println("d: " + d);
 		
 		//Create our keys
 		Key pubkey = new Key(e, n);
 		Key privkey = new Key(d, n);
-		
-		RSAKeyPair keys = new RSAKeyPair(pubkey, privkey);
-		
-		return keys;
+
+		return new RSAKeyPair(pubkey, privkey);
 	}
 
 	private static BigInteger relativePrimeTo(BigInteger phiN) {
@@ -57,19 +49,24 @@ public class Cryptography {
 		int bytesLeftOver = totalBytes % 4;
 		BigInteger encryptedMessage = BigInteger.ZERO;
 		for (int i = 0; i < completeBlocks; i++) {
-			String subS = plainText.substring(i * 4, i * 4 + 4);
-			byte[] bytes = subS.getBytes();
-			BigInteger m = new BigInteger(bytes);
-			BigInteger c = encryptBlock(m, publicKey);
-			encryptedMessage = encryptedMessage.shiftLeft(64).add(c);
+			String fourByteString = plainText.substring(i * 4, i * 4 + 4);
+			BigInteger msgBlock = asBigInteger(fourByteString);
+			BigInteger cipherBlock = encryptBlock(msgBlock, publicKey);
+			encryptedMessage = encryptedMessage.shiftLeft(64).add(cipherBlock);
 		}
 		if (bytesLeftOver > 0) {
-			byte[] bytes = plainText.substring(completeBlocks * 4).getBytes();
-			BigInteger m = new BigInteger(bytes);
-			BigInteger c = encryptBlock(m, publicKey);
-			encryptedMessage = encryptedMessage.shiftLeft(64).add(c);
+			String lastFewChars = plainText.substring(completeBlocks * 4);
+			BigInteger msgBlock = asBigInteger(lastFewChars);
+			BigInteger cipherBlock = encryptBlock(msgBlock, publicKey);
+			encryptedMessage = encryptedMessage.shiftLeft(64).add(cipherBlock);
 		}		
 		return encryptedMessage;
+	}
+
+	private static BigInteger asBigInteger(String s) {
+		byte[] bytes = s.getBytes();
+		BigInteger m = new BigInteger(bytes);
+		return m;
 	}
 	
 	public static String decrypt(BigInteger cipherText, Key privateKey) {
@@ -77,16 +74,15 @@ public class Cryptography {
 		
 		//Mask of 0xFFFFFFFFFFFFFFFF = 8 bytes
 		BigInteger mask = new BigInteger("18446744073709551615");
-		System.out.println(mask);
 		
-		while(cipherText.compareTo(BigInteger.ZERO) != 0)
-		{
+		BigInteger lCipherText = cipherText;
+		while(cipherText.compareTo(BigInteger.ZERO) != 0) {
 			BigInteger cBlock = cipherText.and(mask);
 			BigInteger dBlock = decryptBlock(cBlock, privateKey);
 			byte[] bytes = dBlock.toByteArray();
 			String mBlock = new String(bytes);
 			decryptedMessage = mBlock + decryptedMessage;
-			cipherText = cipherText.shiftRight(64);
+			lCipherText = lCipherText.shiftRight(64);
 		}
 		
 		return decryptedMessage;
