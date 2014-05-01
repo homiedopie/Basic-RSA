@@ -1,10 +1,10 @@
 package chat;
 
-public class Patsy {
+public class Concorde {
 
 	private Bow bow;
 
-	public Patsy(Bow bow) {
+	public Concorde(Bow bow) {
 		this.bow = bow;
 	}
 

@@ -1,15 +1,15 @@
 package core;
 
 import chat.Bow;
-import chat.BraveSirRobin;
-import chat.Patsy;
+import chat.SirLauncelot;
+import chat.Concorde;
 
 public class CryptoChat {
 
 	public static void main(String[] args) {
 		Bow bow = new Bow();
-		Patsy patsy = new Patsy(bow);
-		BraveSirRobin braveSirRobin = new BraveSirRobin(patsy, bow);
+		Concorde concorde = new Concorde(bow);
+		SirLauncelot sirLauncelot = new SirLauncelot(concorde, bow);
 		// braveSirRobin.chat() // starts the main chat loop
 	}
 

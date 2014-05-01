@@ -1,12 +1,12 @@
 package chat;
 
-public class BraveSirRobin {
+public class SirLauncelot {
 
-	private Patsy patsy;
+	private Concorde concorde;
 	private Bow bow;
 
-	public BraveSirRobin(Patsy patsy, Bow bow) {
-		this.patsy = patsy;
+	public SirLauncelot(Concorde concorde, Bow bow) {
+		this.concorde = concorde;
 		this.bow = bow;
 	}
 
