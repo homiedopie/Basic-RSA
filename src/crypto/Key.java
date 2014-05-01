@@ -1,4 +1,4 @@
-package core;
+package crypto;
 
 import java.math.BigInteger;
 
