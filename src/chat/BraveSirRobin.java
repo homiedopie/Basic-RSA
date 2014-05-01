@@ -1,27 +1,26 @@
 package chat;
 
-
 public class BraveSirRobin {
 
 	private Patsy patsy;
-	
-	public BraveSirRobin(Patsy patsy) {
+	private Bow bow;
+
+	public BraveSirRobin(Patsy patsy, Bow bow) {
 		this.patsy = patsy;
+		this.bow = bow;
 	}
 
-	public void chat(){
-		//Get username
-		//Get chat message
-		//Check if connected
-		//if not
-			//Get hostname
-			//Connect()
-		//Encrypt
-		//Send message (Bow.Shoot(Msg))
-		//Loop back to: "Get chat message"
+	public void chat() {
+		// Get username
+		// Get chat message
+		// if not connected...
+		// 		Get hostname
+		// 		Connect()
+		// Send message (bow.shoot(msg)) (shoot encrypts before sending)
+		// Loop back to: "Get chat message"
 	}
-	
+
 	private void connect(String hostName) {
-		//Put connection stuff here.
+		// Put connection stuff here.
 	}
 }
