@@ -8,6 +8,13 @@ public class Concorde {
 		this.bow = bow;
 	}
 
+	public void stopAcceptingNewConnections() {
+		/*
+		 * call the "close" method on my SocketServer and start the message
+		 * receiving thread
+		 */
+	}
+	
 	public void receiveArrows() {
 		// Grab and decrypt/print incoming messages.
 	}
