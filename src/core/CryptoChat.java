@@ -10,7 +10,7 @@ public class CryptoChat {
 		Bow bow = new Bow();
 		Concorde concorde = new Concorde(bow);
 		SirLauncelot sirLauncelot = new SirLauncelot(concorde, bow);
-		// braveSirRobin.chat() // starts the main chat loop
+		sirLauncelot.chat();
 	}
 
 }

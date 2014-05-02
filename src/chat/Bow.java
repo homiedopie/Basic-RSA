@@ -1,5 +1,8 @@
 package chat;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.Socket;
 import crypto.RSAKeyPair;
 
@@ -40,6 +43,21 @@ public class Bow {
 
 	public void setKeys(RSAKeyPair keys) {
 		this.keys = keys;
+	}
+	
+	/**
+	 * Encrypts and sends a message using an existing connection.
+	 * @param fromUser the message to be sent.
+	 */
+	public void shootArrow(String fromUser) {
+		//Encrypt string in format: "Username: fromUser".
+		BigInteger biEncrypted = crypto.Cryptography.encrypt(userName + ": " + fromUser, keys.getPublicKey());
+		
+		try(PrintWriter out = new PrintWriter(getSocket().getOutputStream(), true)){
+			out.println(biEncrypted.toString());
+		}catch(IOException ex){
+			System.out.println("Message could not be sent.");
+		}
 	}
 
 }
