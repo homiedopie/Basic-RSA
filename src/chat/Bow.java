@@ -3,6 +3,7 @@ package chat;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.Socket;
@@ -10,6 +11,7 @@ import java.net.Socket;
 import static util.BigIntegerUtil.asBigInteger;
 import crypto.Cryptography;
 import crypto.Key;
+import crypto.RSAKeyPair;
 
 public class Bow {
 
@@ -109,5 +111,18 @@ public class Bow {
 					"An I/O error occurred while receiving.", e);
 		}
 		return message;
+	}
+	
+	public void generateAndSendKey() throws IOException {
+		// new connection, generate RSA keys and send public key
+		setChatState(ChatState.EXCHANGING);
+
+		RSAKeyPair rsaKeys = Cryptography.generateRSAKeys();
+		setOurPrivateKey(rsaKeys.getPrivateKey());
+
+		ObjectOutputStream outLine = new ObjectOutputStream(
+				socket.getOutputStream());
+
+		outLine.writeObject(rsaKeys.getPublicKey());
 	}
 }

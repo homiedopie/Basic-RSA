@@ -2,13 +2,10 @@ package chat;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import crypto.Cryptography;
 import crypto.Key;
-import crypto.RSAKeyPair;
 
 public class Concorde {
 
@@ -85,19 +82,8 @@ public class Concorde {
 				Socket bowSocket = bow.getSocket();
 				if (bow.getChatState() == ChatState.NOT_CONNECTED
 						&& (bowSocket == null || bowSocket.isClosed())) {
-					// new connection, generate RSA keys and send public key
-					bow.setChatState(ChatState.EXCHANGING);
 					bow.setSocket(clientSocket);
-
-					RSAKeyPair rsaKeys = Cryptography.generateRSAKeys();
-					bow.setOurPrivateKey(rsaKeys.getPrivateKey());
-
-					ObjectOutputStream outLine = new ObjectOutputStream(
-							clientSocket.getOutputStream());
-
-					outLine.writeObject(rsaKeys.getPublicKey());
-
-					outLine.close();
+					bow.generateAndSendKey();
 
 					concorde.receiveArrows();
 				} else {
