@@ -1,28 +1,46 @@
 package chat;
 
 import java.net.Socket;
+import java.net.SocketImpl;
+
+import crypto.Key;
 import crypto.RSAKeyPair;
 
 public class Bow {
 
-	private Socket socket = null;
-	private ChatState chatState = ChatState.NOT_CONNECTED;
+	private Socket socket;
+	private int port;
+	private ChatState chatState;
 	private String userName;
-	private RSAKeyPair keys;
+	private Key ourPrivateKey;
+	private Key theirPublicKey;
 
-	public Socket getSocket() {
+	public Bow(int port) {
+		this.port = port;
+		chatState = ChatState.NOT_CONNECTED;
+	}
+
+	public synchronized Socket getSocket() {
 		return socket;
 	}
 
-	public void setSocket(Socket socket) {
+	public synchronized void setSocket(Socket socket) {
 		this.socket = socket;
 	}
 
-	public ChatState getChatState() {
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public synchronized ChatState getChatState() {
 		return chatState;
 	}
 
-	public void setChatState(ChatState chatState) {
+	public synchronized void setChatState(ChatState chatState) {
 		this.chatState = chatState;
 	}
 
@@ -34,12 +52,12 @@ public class Bow {
 		this.userName = userName;
 	}
 
-	public RSAKeyPair getKeys() {
-		return keys;
+	public void setOurPrivateKey(Key ourPrivateKey) {
+		this.ourPrivateKey = ourPrivateKey;
 	}
 
-	public void setKeys(RSAKeyPair keys) {
-		this.keys = keys;
+	public void setTheirPublicKey(Key theirPublicKey) {
+		this.theirPublicKey = theirPublicKey;
 	}
 
 }
