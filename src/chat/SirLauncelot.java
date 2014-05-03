@@ -51,6 +51,7 @@ public class SirLauncelot {
 				
 				//Finally, we send out message and loop back around.
 				bow.shootArrow(fromUser);
+				System.out.print(">");
 			}
 		}catch(IOException ex){
 			System.out.println("Error reading input.");
