@@ -102,8 +102,10 @@ public class Bow {
 	public String receiveArrow() {
 		String message = null;
 		try {
+			System.out.println("Listening for messages...");
 			String encryptedMessage = in.readLine();
 			if (encryptedMessage != null) {
+				System.out.println("Got a message!");
 				BigInteger cipherText = asBigInteger(encryptedMessage);
 				message = Cryptography.decrypt(cipherText, ourPrivateKey);
 			}
