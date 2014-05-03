@@ -73,7 +73,7 @@ public class Cryptography {
 		BigInteger mask = new BigInteger("18446744073709551615");
 
 		BigInteger lCipherText = cipherText;
-		while (cipherText.compareTo(BigInteger.ZERO) != 0) {
+		while (lCipherText.compareTo(BigInteger.ZERO) != 0) {
 			BigInteger cBlock = cipherText.and(mask);
 			BigInteger dBlock = decryptBlock(cBlock, privateKey);
 			byte[] bytes = dBlock.toByteArray();
