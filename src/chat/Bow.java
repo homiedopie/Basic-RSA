@@ -60,6 +60,7 @@ public class Bow {
 	}
 
 	public synchronized void setChatState(ChatState chatState) {
+		System.out.println("Setting chat state to " + chatState);
 		this.chatState = chatState;
 	}
 
@@ -124,5 +125,6 @@ public class Bow {
 				socket.getOutputStream());
 
 		outLine.writeObject(rsaKeys.getPublicKey());
+		System.out.println("Key sent.");
 	}
 }
