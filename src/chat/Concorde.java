@@ -21,14 +21,19 @@ public class Concorde {
 		this.bow = bow;
 	}
 
-	public void listen() throws IOException {
+	public void listen() {
 		if (serverSocket != null || connectionListener != null) {
 			throw new RuntimeException("Concorde cannot be told to listen when"
 					+ " he is already listening for new connections.");
 		}
-		serverSocket = new ServerSocket(bow.getPort());
-		connectionListener = new ConnectionListener(serverSocket, bow, this);
-		connectionListener.start();
+		try {
+			serverSocket = new ServerSocket(bow.getPort());
+			connectionListener = new ConnectionListener(serverSocket, bow, this);
+			connectionListener.start();
+		} catch (IOException e) {
+			throw new RuntimeException(
+					"Couldn't open a socket to listen for connections.", e);
+		}
 	}
 
 	public void stopAcceptingNewConnections() throws IOException {
@@ -65,7 +70,8 @@ public class Concorde {
 		private Concorde concorde;
 		private boolean askedToStopListening = false;
 
-		public ConnectionListener(ServerSocket serverSocket, Bow bow, Concorde concorde) {
+		public ConnectionListener(ServerSocket serverSocket, Bow bow,
+				Concorde concorde) {
 			this.serverSocket = serverSocket;
 			this.bow = bow;
 			this.concorde = concorde;
@@ -92,7 +98,7 @@ public class Concorde {
 					outLine.writeObject(rsaKeys.getPublicKey());
 
 					outLine.close();
-					
+
 					concorde.receiveArrows();
 				} else {
 					// bow may be holding an active connection

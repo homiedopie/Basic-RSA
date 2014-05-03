@@ -9,6 +9,7 @@ public class CryptoChat {
 	public static void main(String[] args) {
 		Bow bow = new Bow(6969);
 		Concorde concorde = new Concorde(bow);
+		concorde.listen();
 		SirLauncelot sirLauncelot = new SirLauncelot(concorde, bow);
 		sirLauncelot.chat();
 	}
