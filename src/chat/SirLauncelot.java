@@ -1,5 +1,11 @@
 package chat;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 public class SirLauncelot {
 
 	private Concorde concorde;
@@ -10,17 +16,64 @@ public class SirLauncelot {
 		this.bow = bow;
 	}
 
+	/**
+	 * Main chat loop for user input.
+	 */
 	public void chat() {
 		// Get username
+		System.out.println("Enter a username:");
+		System.out.print(">");
 		// Get chat message
-		// if not connected...
-		// 		Get hostname
-		// 		Connect()
-		// Send message (bow.shoot(msg)) (shoot encrypts before sending)
-		// Loop back to: "Get chat message"
+		try(BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))){
+			String fromUser = stdIn.readLine();
+			
+			bow.setUserName(fromUser);
+			
+			System.out.println("You may now enter messages to send.");
+			System.out.print(">");
+			
+			//Loops continuously for proper chat interaction.
+			while((fromUser = stdIn.readLine()) != null){
+				
+				//In case a bad hostname is entered, we can just try to get another hostname.
+				//This gives the user a new chance as opposed to just exiting.
+				while(bow.getChatState() == ChatState.NOT_CONNECTED){
+					System.out.println("Please enter a host name to connect to.");
+					System.out.print(">");
+					
+					//If we connect properly, this should no longer loop.
+					connect(stdIn.readLine());
+				}
+				
+				//We are going to block until the exchange is done.
+				//We'll let Concorde handle exchanging keys for consistency.
+				while(bow.getChatState() == ChatState.EXCHANGING);
+				
+				//Finally, we send out message and loop back around.
+				bow.shootArrow(fromUser);
+			}
+		}catch(IOException ex){
+			System.out.println("Error reading input.");
+			System.exit(1);
+		}
 	}
 
+	/**
+	 * Connects to a specified host on a predetermined port(6969);
+	 * @param hostName IP of the other person.
+	 */
 	private void connect(String hostName) {
-		// Put connection stuff here.
+		int portNumber = 6969;
+		
+		//Create a socket and connect.
+		try(Socket conSocket = new Socket(hostName, portNumber)){
+			bow.setSocket(conSocket);
+			bow.setChatState(ChatState.EXCHANGING);
+			concorde.stopAcceptingNewConnections();
+		}catch(UnknownHostException ex){
+			System.out.println("Could find host.");
+		}catch(IOException ex){
+			System.out.println("Could not connect to host.");
+		}
 	}
 }
