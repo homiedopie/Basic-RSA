@@ -54,6 +54,7 @@ public class SirLauncelot {
 			}
 		}catch(IOException ex){
 			System.out.println("Error reading input.");
+			concorde.stopReceivingArrows();
 			System.exit(1);
 		}
 	}
@@ -63,15 +64,17 @@ public class SirLauncelot {
 	 * @param hostName IP of the other person.
 	 */
 	private void connect(String hostName) {
-		int portNumber = 6969;
+		int portNumber = bow.getPort();
 		
 		//Create a socket and connect.
-		try(Socket conSocket = new Socket(hostName, portNumber)){
+		try{
+			Socket conSocket = new Socket(hostName, portNumber);
 			bow.setSocket(conSocket);
-			bow.setChatState(ChatState.EXCHANGING);
+			bow.generateAndSendKey();
 			concorde.stopAcceptingNewConnections();
+			concorde.receiveArrows();
 		}catch(UnknownHostException ex){
-			System.out.println("Could find host.");
+			System.out.println("Could not find host.");
 		}catch(IOException ex){
 			System.out.println("Could not connect to host.");
 		}
