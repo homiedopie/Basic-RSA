@@ -3,6 +3,8 @@ package crypto;
 import java.math.BigInteger;
 import java.util.Random;
 
+import util.BigIntegerUtil;
+
 /*
  * A class of static methods to implement the RSA encryption/decryption algorithm.
  * 
@@ -51,23 +53,17 @@ public class Cryptography {
 		BigInteger encryptedMessage = BigInteger.ZERO;
 		for (int i = 0; i < completeBlocks; i++) {
 			String fourByteString = plainText.substring(i * 4, i * 4 + 4);
-			BigInteger msgBlock = asBigInteger(fourByteString);
+			BigInteger msgBlock = BigIntegerUtil.asBigInteger(fourByteString);
 			BigInteger cipherBlock = encryptBlock(msgBlock, publicKey);
 			encryptedMessage = encryptedMessage.shiftLeft(64).add(cipherBlock);
 		}
 		if (bytesLeftOver > 0) {
 			String lastFewChars = plainText.substring(completeBlocks * 4);
-			BigInteger msgBlock = asBigInteger(lastFewChars);
+			BigInteger msgBlock = BigIntegerUtil.asBigInteger(lastFewChars);
 			BigInteger cipherBlock = encryptBlock(msgBlock, publicKey);
 			encryptedMessage = encryptedMessage.shiftLeft(64).add(cipherBlock);
 		}
 		return encryptedMessage;
-	}
-
-	private static BigInteger asBigInteger(String s) {
-		byte[] bytes = s.getBytes();
-		BigInteger m = new BigInteger(bytes);
-		return m;
 	}
 
 	public static String decrypt(BigInteger cipherText, Key privateKey) {
