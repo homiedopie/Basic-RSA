@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.Socket;
-import java.net.SocketImpl;
 
 import crypto.Key;
-import crypto.RSAKeyPair;
 
 public class Bow {
 
@@ -69,7 +67,7 @@ public class Bow {
 	 */
 	public void shootArrow(String fromUser) {
 		//Encrypt string in format: "Username: fromUser".
-		BigInteger biEncrypted = crypto.Cryptography.encrypt(userName + ": " + fromUser, keys.getPublicKey());
+		BigInteger biEncrypted = crypto.Cryptography.encrypt(userName + ": " + fromUser, theirPublicKey);
 		
 		try(PrintWriter out = new PrintWriter(getSocket().getOutputStream(), true)){
 			out.println(biEncrypted.toString());
