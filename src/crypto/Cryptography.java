@@ -68,20 +68,20 @@ public class Cryptography {
 
 	public static String decrypt(BigInteger cipherText, Key privateKey) {
 		String decryptedMessage = "";
-
-		// Mask of 0xFFFFFFFFFFFFFFFF = 8 bytes
+		
+		//Mask of 0xFFFFFFFFFFFFFFFF = 8 bytes
 		BigInteger mask = new BigInteger("18446744073709551615");
-
-		BigInteger lCipherText = cipherText;
-		while (lCipherText.compareTo(BigInteger.ZERO) != 0) {
+		
+		while(cipherText.compareTo(BigInteger.ZERO) != 0)
+		{
 			BigInteger cBlock = cipherText.and(mask);
 			BigInteger dBlock = decryptBlock(cBlock, privateKey);
 			byte[] bytes = dBlock.toByteArray();
 			String mBlock = new String(bytes);
 			decryptedMessage = mBlock + decryptedMessage;
-			lCipherText = lCipherText.shiftRight(64);
+			cipherText = cipherText.shiftRight(64);
 		}
-
+		
 		return decryptedMessage;
 	}
 
