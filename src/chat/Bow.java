@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.Socket;
+import java.net.SocketException;
 
 import crypto.Cryptography;
 import crypto.Key;
@@ -106,8 +107,8 @@ public class Bow {
 				message = Cryptography.decrypt(cipherText, ourPrivateKey);
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(
-					"An I/O error occurred while receiving.", e);
+			setChatState(ChatState.NOT_CONNECTED);
+			System.out.println("Connection lost.");
 		}
 		return message;
 	}

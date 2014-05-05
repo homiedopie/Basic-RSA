@@ -35,6 +35,13 @@ public class SirLauncelot {
 			//Loops continuously for proper chat interaction.
 			while((fromUser = stdIn.readLine()) != null){
 				
+				if(fromUser.equals("elderberries"))
+				{
+					if(bow.getSocket() != null || !bow.getSocket().isClosed())
+						bow.getSocket().close();
+					break;
+				}
+				
 				//In case a bad hostname is entered, we can just try to get another hostname.
 				//This gives the user a new chance as opposed to just exiting.
 				while(bow.getChatState() == ChatState.NOT_CONNECTED){
