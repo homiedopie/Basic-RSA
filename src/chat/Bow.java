@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.Socket;
 
-import static util.BigIntegerUtil.asBigInteger;
 import crypto.Cryptography;
 import crypto.Key;
 import crypto.RSAKeyPair;
@@ -60,7 +59,6 @@ public class Bow {
 	}
 
 	public synchronized void setChatState(ChatState chatState) {
-		System.out.println("Setting chat state to " + chatState);
 		this.chatState = chatState;
 	}
 
@@ -102,11 +100,9 @@ public class Bow {
 	public String receiveArrow() {
 		String message = null;
 		try {
-			System.out.println("Listening for messages...");
 			String encryptedMessage = in.readLine();
 			if (encryptedMessage != null) {
-				System.out.println("Got a message!");
-				BigInteger cipherText = asBigInteger(encryptedMessage);
+				BigInteger cipherText = new BigInteger(encryptedMessage);
 				message = Cryptography.decrypt(cipherText, ourPrivateKey);
 			}
 		} catch (IOException e) {
@@ -127,6 +123,5 @@ public class Bow {
 				socket.getOutputStream());
 
 		outLine.writeObject(rsaKeys.getPublicKey());
-		System.out.println("Key sent.");
 	}
 }

@@ -138,13 +138,11 @@ public class Concorde {
 			}
 			ObjectInputStream inLine = new ObjectInputStream(
 					socket.getInputStream());
-			System.out.println("Trying to read a key from the socket...");
 			Object object = inLine.readObject();
 			if (object instanceof Key) {
 				bow.setTheirPublicKey((Key) object);
 				keyReceived = true;
 				bow.setChatState(ChatState.CONNECTED);
-				System.out.println("We received a key: " + object.toString());
 			} else {
 				System.out.println("Received something other than "
 						+ "a key while exchanging. Still waiting "
