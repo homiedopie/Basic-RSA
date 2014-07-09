@@ -15,8 +15,4 @@ public class Key extends Pair<BigInteger, BigInteger> {
 		super(first, second);
 	}
 	
-	@Override
-	public String toString() {
-		return "(" + getFirst() + ", " + getSecond() + ")";
-	}	
 }
